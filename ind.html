@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html ng-app="todoApp">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="">
+    <title>AngularJS To-Do List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .done {
+            text-decoration: line-through;
+            color: gray;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            padding: 5px;
+            width: 250px;
+        }
+        button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body ng-controller="TodoController">
+
+    <h2>AngularJS To-Do List</h2>
+
+    <input type="text" ng-model="newTask" placeholder="Add new task" />
+    <button ng-click="addTask()">Add</button>
+
+    <ul>
+        <li ng-repeat="task in tasks">
+            <input type="checkbox" ng-model="task.done">
+            <span ng-class="{done: task.done}">{{ task.text }}</span>
+            <button ng-click="removeTask($index)">Remove</button>
+        </li>
+    </ul>
+
+    <p>Total Tasks: {{ tasks.length }} | Remaining: {{ remaining() }}</p>
+
+</body>
+
+<script>
+    angular.module('todoApp', [])
+    .controller('TodoController', function($scope) {
+        $scope.tasks = [
+            { text: 'Learn AngularJS', done: false },
+            { text: 'Build a to-do list', done: false }
+        ];
+
+        $scope.addTask = function() {
+            if ($scope.newTask && $scope.newTask.trim() !== '') {
+                $scope.tasks.push({ text: $scope.newTask, done: false });
+                $scope.newTask = '';
+            }
+        };
+
+        $scope.removeTask = function(index) {
+            $scope.tasks.splice(index, 1);
+        };
+
+        $scope.remaining = function() {
+            return $scope.tasks.filter(task => !task.done).length;
+        };
+    });
+</script>
+
+</html>
